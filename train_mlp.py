@@ -5,7 +5,7 @@ from __future__ import annotations
 import mlx.core as mx
 import mlx.nn as nn
 import mlx.optimizers as optim
-
+import mlx.utils as U
 
 EPOCHS = 200
 LEARNING_RATE = 0.03
@@ -79,6 +79,11 @@ def main() -> None:
             f"training did not reach {MIN_ACCURACY:.0%} accuracy "
             f"(got {accuracy.item():.2%})"
         )
+    weights = dict(U.tree_flatten(model.parameters()))
+
+    # 2. Save them to a safetensors file: list of weights and biases
+    mx.save_safetensors("mlp_weights.safetensors", weights)
+    print("Model weights saved")
 
 
 if __name__ == "__main__":
